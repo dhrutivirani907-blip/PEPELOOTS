@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#050707">
+<meta name="description" content="PEPE LOOTS — watch rewarded ads, complete tasks and earn PEPE credits.">
+<title>PEPE LOOTS</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@500;600;700&display=swap');
+:root{
+  --bg:#030505; --panel:#0b1010; --panel2:#111616; --green:#00d88b;
+  --green2:#00ff9d; --muted:#82918d; --line:rgba(0,255,157,.20);
+  --gold:#ffbf35; --danger:#ff526d; --white:#f1f6f4;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#000;color:var(--white);font-family:Rajdhani,Arial,sans-serif;min-height:100%;overflow-x:hidden}
+body{background:
+ radial-gradient(circle at 50% -10%,rgba(0,255,157,.10),transparent 30%),
+ linear-gradient(#030505,#000 75%);padding-bottom:88px}
+button,input{font:inherit}
+button{border:0;color:inherit;cursor:pointer}
+.app{max-width:720px;margin:0 auto;min-height:100vh;position:relative}
+.topbar{padding:24px 20px 8px;text-align:center}
+.logo3d{
+ font-family:'Share Tech Mono',monospace;font-weight:900;letter-spacing:5px;
+ font-size:clamp(34px,9vw,62px);line-height:1;color:#effff9;
+ text-shadow:0 3px 0 #087c59,0 7px 0 #034832,0 0 20px rgba(0,255,157,.42);
+ transform:perspective(280px) rotateX(10deg);
+}
+.subtitle{font-family:'Share Tech Mono';font-size:11px;letter-spacing:2px;color:#60716d;margin-top:12px}
+.screen{display:none;padding:10px 18px 20px}.screen.active{display:block}
+.balance-card{
+ margin:12px 0 18px;padding:18px;border:1px solid var(--line);border-radius:26px;
+ background:linear-gradient(145deg,#111717,#070909);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 10px 35px rgba(0,0,0,.4)
+}
+.balance-row{display:flex;align-items:center;gap:16px}
+.coin-logo{
+ width:68px;height:68px;border-radius:50%;object-fit:contain;background:#0a1b15;
+ box-shadow:0 0 0 2px #00d88b,0 0 22px rgba(0,255,157,.35)
+}
+.balance-label{font-family:'Share Tech Mono';font-size:11px;color:#78908a;letter-spacing:2px}
+.balance{font-family:'Share Tech Mono';font-size:29px;color:#fff;margin-top:4px}
+.balance span{color:var(--green2);font-size:14px}
+.primary{
+ width:100%;padding:16px 18px;border-radius:18px;
+ background:linear-gradient(135deg,#08d995,#00a96e);color:#001b11;
+ font-weight:800;letter-spacing:1.4px;box-shadow:0 0 22px rgba(0,255,157,.22)
+}
+.primary:active{transform:scale(.985)}
+.section-title{font-family:'Share Tech Mono';font-size:13px;letter-spacing:2px;color:#78908a;margin:20px 4px 10px}
+.feature-card{
+ padding:22px;border-radius:28px;border:1px solid rgba(0,255,157,.35);
+ background:linear-gradient(145deg,rgba(0,96,66,.48),rgba(8,13,12,.98));
+ box-shadow:0 0 35px rgba(0,255,157,.12),inset 0 1px rgba(255,255,255,.05)
+}
+.badges{display:flex;gap:8px;flex-wrap:wrap}
+.badge{border:1px solid rgba(0,255,157,.38);border-radius:999px;padding:7px 12px;color:#70efc0;font-family:'Share Tech Mono';font-size:11px}
+.ad-head{display:flex;align-items:center;gap:14px;margin:20px 0 16px}
+.ad-icon{width:70px;height:70px;border-radius:22px;display:grid;place-items:center;background:linear-gradient(145deg,#43f4c5,#009b70);color:#03251a;font-size:34px;box-shadow:0 0 28px rgba(0,255,157,.3)}
+.ad-title{font-family:'Share Tech Mono';font-size:25px;letter-spacing:2px}
+.ad-desc{color:#b9c5c1;font-family:'Share Tech Mono';font-size:12px;margin-top:6px}
+.reward-pill{display:inline-block;border:1px solid rgba(0,255,157,.4);border-radius:12px;padding:9px 13px;color:#66edbb;font-family:'Share Tech Mono';font-size:13px}
+.big-ad{margin-top:16px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.stat{padding:14px;border-radius:16px;background:#0a0f0f;border:1px solid #172523}
+.stat small{display:block;color:#6f807b;font-family:'Share Tech Mono';font-size:9px;letter-spacing:1px}.stat b{font-family:'Share Tech Mono';font-size:19px}
+.form-card{padding:18px;border-radius:24px;background:#0b1010;border:1px solid #1a2925}
+input{
+ width:100%;padding:15px 14px;margin:8px 0;border-radius:14px;border:1px solid #263b35;
+ background:#050808;color:#fff;outline:none
+}
+input:focus{border-color:#00d88b;box-shadow:0 0 0 3px rgba(0,216,139,.08)}
+.note{font-size:12px;color:#788983;line-height:1.45}
+.withdraw-item{padding:14px;margin-top:10px;border-radius:16px;background:#080d0d;border:1px solid #172622}
+.withdraw-top{display:flex;justify-content:space-between;font-family:'Share Tech Mono'}
+.status{font-size:10px;padding:5px 8px;border-radius:99px;border:1px solid #456;letter-spacing:1px}
+.status.pending{color:#ffd45a;border-color:#66521e}.status.approved{color:#53ffb9;border-color:#185b42}.status.rejected{color:#ff7187;border-color:#632432}
+.task-card{text-align:center;padding:48px 20px;border-radius:26px;border:1px dashed #2b4b42;background:#0a0f0e}
+.task-card h2{font-family:'Share Tech Mono';letter-spacing:2px}
+.task-card p{color:#6e7d79}
+.ref-code{font-family:'Share Tech Mono';font-size:20px;color:#6dffc5;text-align:center;margin:15px 0;word-break:break-all}
+.copy{background:#101b18;border:1px solid #205346;padding:10px 14px;border-radius:12px;width:100%}
+.bottom{
+ position:fixed;z-index:20;left:50%;bottom:0;transform:translateX(-50%);
+ width:min(720px,100%);height:78px;background:rgba(5,7,7,.97);
+ border-top:1px solid #25312e;display:grid;grid-template-columns:repeat(5,1fr);
+ padding:8px 6px calc(8px + env(safe-area-inset-bottom));backdrop-filter:blur(12px)
+}
+.nav{background:none;color:#71807c;font-family:'Share Tech Mono';font-size:9px;letter-spacing:1px;display:flex;flex-direction:column;align-items:center;gap:5px}
+.nav .ico{font-size:23px;line-height:1}.nav.active{color:#59f3bd}.nav.active .ico{text-shadow:0 0 16px #00ff9d}
+.modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.76);display:none;align-items:center;justify-content:center;padding:22px}
+.modal.show{display:flex}.modal-box{width:min(420px,100%);padding:26px;border-radius:28px;border:1px solid #1ce59e;background:linear-gradient(145deg,#0d211b,#080d0c);box-shadow:0 0 60px rgba(0,255,157,.22);text-align:center}
+.modal-icon{font-size:45px}.modal-box h2{font-family:'Share Tech Mono';margin:12px 0 8px}.modal-box p{color:#aebcb7;line-height:1.5}.modal-close{margin-top:14px;background:#0d1815;border:1px solid #254d41;border-radius:14px;padding:12px 20px;width:100%}
+.toast{position:fixed;z-index:100;left:50%;bottom:95px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;padding:12px 16px;border-radius:14px;background:#101816;border:1px solid #285448;color:#dffef2;font-family:'Share Tech Mono';font-size:11px;transition:.25s;max-width:90%;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.loading{opacity:.65;pointer-events:none}
+.admin-link{font-size:10px;color:#34433f;text-align:center;margin-top:18px}
+</style>
+</head>
+
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="logo3d">PEPE LOOTS</div>
+    <div class="subtitle">WATCH • EARN • COMPLETE • REFER</div>
+  </header>
+
+  <main>
+    <section id="home" class="screen active">
+      <div class="balance-card">
+        <div class="balance-row">
+          <svg class="coin-logo" viewBox="0 0 100 100" role="img" aria-label="PEPE coin">
+  <defs><radialGradient id="pepeG"><stop offset="0" stop-color="#8dff72"/><stop offset="1" stop-color="#20a947"/></radialGradient></defs>
+  <circle cx="50" cy="50" r="47" fill="url(#pepeG)" stroke="#d5ffcb" stroke-width="2"/>
+  <circle cx="50" cy="50" r="39" fill="#43c95c" stroke="#176f36" stroke-width="2"/>
+  <ellipse cx="38" cy="39" rx="11" ry="9" fill="#efffe9"/><ellipse cx="62" cy="39" rx="11" ry="9" fill="#efffe9"/>
+  <circle cx="39" cy="40" r="4" fill="#142719"/><circle cx="61" cy="40" r="4" fill="#142719"/>
+  <path d="M27 57 Q50 76 73 57 Q67 78 50 80 Q33 78 27 57Z" fill="#17321f"/>
+  <path d="M34 62 Q50 69 66 62" fill="none" stroke="#d5ffcb" stroke-width="3" stroke-linecap="round"/>
+  <text x="50" y="92" text-anchor="middle" font-family="Arial" font-size="8" font-weight="900" fill="#eaffdf">PEPE</text>
+</svg>
+          <div>
+            <div class="balance-label">TOTAL PEPE BALANCE</div>
+            <div class="balance" id="homeBalance">0 <span>PEPE</span></div>
+          </div>
+        </div>
+      </div>
+      <button class="primary" onclick="go('earn')">GO TO THE EARNING SECTION →</button>
+
+      <div class="section-title">QUICK ACCESS</div>
+      <div class="stats">
+        <div class="stat"><small>DAILY ADS</small><b id="homeAds">0 / 10</b></div>
+        <div class="stat"><small>REFERRALS</small><b id="homeRefs">0</b></div>
+      </div>
+    </section>
+
+    <section id="earn" class="screen">
+      <div class="section-title">PEPE EARNING ZOON</div>
+      <div class="feature-card">
+        <div class="badges">
+          <div class="badge">⚡ MEDIUM REWARD UP TO 500</div>
+          <div class="badge">✓ VERIFIED VIDEO</div>
+        </div>
+        <div class="ad-head">
+          <div class="ad-icon">▶</div>
+          <div>
+            <div class="ad-title">ADSGRAM ADS</div>
+            <div class="ad-desc">Rewarded video advertising</div>
+          </div>
+        </div>
+        <div class="reward-pill">⚡ 300 PEPE / AD</div>
+        <div class="stats big-ad">
+          <div class="stat"><small>DAILY WATCH LIMIT</small><b id="adsRemaining">10 / 10</b></div>
+          <div class="stat"><small>EARNED TODAY</small><b id="earnedToday">0 PEPE</b></div>
+        </div>
+        <button id="watchBtn" class="primary" style="margin-top:16px" onclick="watchAd()">▶ WATCH ADS • GET 300 PEPE</button>
+        <p class="note" style="margin:13px 2px 0">Reward is credited only after AdsGram confirms the rewarded ad was completed. One reward per completed ad, subject to the daily limit.</p>
+      </div>
+    </section>
+
+    <section id="tasks" class="screen">
+      <div class="section-title">TASKS</div>
+      <div class="task-card">
+        <div style="font-size:44px">✓</div>
+        <h2>Task added Soon...</h2>
+        <p>New earning tasks will appear here.</p>
+      </div>
+    </section>
+
+    <section id="refer" class="screen">
+      <div class="section-title">REFER & EARN</div>
+      <div class="form-card">
+        <div class="section-title" style="margin-top:0">YOUR REFERRAL LINK</div>
+        <div id="refLink" class="ref-code">Loading...</div>
+        <button class="copy" onclick="copyRef()">COPY REFERRAL LINK</button>
+        <p class="note">A new user can be attributed to one referrer only. A referral reward is credited once after the referred user completes their first qualifying app session. Repeated clicks do not create repeated rewards.</p>
+        <div class="stats">
+          <div class="stat"><small>YOUR REFERRALS</small><b id="refCount">0</b></div>
+          <div class="stat"><small>REFERRAL REWARD</small><b>300 PEPE</b></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="withdraw" class="screen">
+      <div class="section-title">PEPE WITHDRAWAL</div>
+      <div class="form-card">
+        <div class="balance-label">AVAILABLE BALANCE</div>
+        <div class="balance" id="withdrawBalance">0 <span>PEPE</span></div>
+        <p class="note">Minimum withdrawal: <b>3,000 PEPE</b>. Enter your Binance ID below. Withdrawal requests are manually reviewed and may be approved or rejected according to the app's payout rules.</p>
+        <input id="binanceId" placeholder="Enter Binance ID" maxlength="80" autocomplete="off">
+        <input id="withdrawAmount" type="number" min="3000" step="1" placeholder="PEPE amount (minimum 3000)">
+        <button class="primary" onclick="submitWithdrawal()">REQUEST WITHDRAWAL</button>
+        <div class="section-title">MY REQUESTS</div>
+        <div id="withdrawals">Loading...</div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom">
+    <button class="nav active" data-screen="home" onclick="go('home')"><span class="ico">⌂</span>HOME</button>
+    <button class="nav" data-screen="tasks" onclick="go('tasks')"><span class="ico">✓</span>TASKS</button>
+    <button class="nav" data-screen="earn" onclick="go('earn')"><span class="ico">▶</span>EARN</button>
+    <button class="nav" data-screen="refer" onclick="go('refer')"><span class="ico">♧</span>REFER</button>
+    <button class="nav" data-screen="withdraw" onclick="go('withdraw')"><span class="ico">⇄</span>WITHDRAW</button>
+  </nav>
+</div>
+
+<div id="rewardModal" class="modal">
+  <div class="modal-box">
+    <div class="modal-icon">🪙</div>
+    <h2>300 PEPE ADDED</h2>
+    <p>Your completed rewarded ad has been credited to your Total Balance.</p>
+    <button class="primary" onclick="closeModal()">CONTINUE</button>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+const API_BASE = window.__API_BASE || (location.hostname.endsWith("onrender.com") ? location.origin : "https://pepe-backend-wkym.onrender.com");
+const ADSGRAM_BLOCK_ID = "YOUR_ADSGRAM_BLOCK_ID"; // Replace with your AdsGram Reward block ID.
+const REWARD_PER_AD = 300;
+const DAILY_LIMIT = 10;
+
+const tg = window.Telegram?.WebApp;
+if (tg) { tg.ready(); tg.expand(); }
+
+let state = { user:null, adsgram:null, busy:false };
+
+function initData() {
+  return tg?.initData || "";
+}
+
+function headers(extra={}) {
+  return Object.assign({"Content-Type":"application/json"}, extra);
+}
+
+async function api(path, options={}) {
+  const opts = Object.assign({}, options);
+  opts.headers = Object.assign(headers(), options.headers || {});
+  if (initData()) opts.headers["X-Telegram-Init-Data"] = initData();
+  const res = await fetch(API_BASE + path, opts);
+  const data = await res.json().catch(()=>({error:"Invalid server response"}));
+  if (!res.ok) throw new Error(data.error || "Request failed");
+  return data;
+}
+
+function toast(msg) {
+  const el=document.getElementById("toast");
+  el.textContent=msg; el.classList.add("show");
+  clearTimeout(window.__toast); window.__toast=setTimeout(()=>el.classList.remove("show"),2600);
+}
+
+function go(id) {
+  document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".nav").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));
+  window.scrollTo({top:0,behavior:"smooth"});
+  if(id==="withdraw") loadWithdrawals();
+}
+
+function render() {
+  const u=state.user; if(!u) return;
+  const b=Number(u.balance||0);
+  document.getElementById("homeBalance").innerHTML=`${b.toLocaleString()} <span>PEPE</span>`;
+  document.getElementById("withdrawBalance").innerHTML=`${b.toLocaleString()} <span>PEPE</span>`;
+  const watched=Number(u.adsToday||0);
+  document.getElementById("homeAds").textContent=`${watched} / ${DAILY_LIMIT}`;
+  document.getElementById("adsRemaining").textContent=`${Math.max(0,DAILY_LIMIT-watched)} / ${DAILY_LIMIT}`;
+  document.getElementById("earnedToday").textContent=`${(watched*REWARD_PER_AD).toLocaleString()} PEPE`;
+  document.getElementById("refCount").textContent=Number(u.referrals||0);
+  document.getElementById("homeRefs").textContent=Number(u.referrals||0);
+  document.getElementById("refLink").textContent=u.referralLink || "Unavailable";
+  document.getElementById("watchBtn").disabled = watched >= DAILY_LIMIT;
+  document.getElementById("watchBtn").textContent = watched >= DAILY_LIMIT ? "DAILY LIMIT REACHED" : "▶ WATCH ADS • GET 300 PEPE";
+}
+
+async function loadMe() {
+  const q = new URLSearchParams(location.search);
+  const ref = q.get("ref") || "";
+  const data=await api("/api/me", {method:"POST", body:JSON.stringify({ref})});
+  state.user=data.user;
+  render();
+}
+
+async function initAdsgram() {
+  if (!window.Adsgram) { toast("AdsGram SDK did not load."); return false; }
+  if (!ADSGRAM_BLOCK_ID || ADSGRAM_BLOCK_ID==="YOUR_ADSGRAM_BLOCK_ID") {
+    toast("Add your AdsGram Block ID first.");
+    return false;
+  }
+  try {
+    state.adsgram = window.Adsgram.init({blockId:ADSGRAM_BLOCK_ID});
+    return true;
+  } catch(e) {
+    toast("AdsGram could not initialize.");
+    return false;
+  }
+}
+
+async function watchAd() {
+  if(state.busy) return;
+  if(!state.user) return toast("Please wait for your profile to load.");
+  if(Number(state.user.adsToday)>=DAILY_LIMIT) return toast("Daily watch limit reached.");
+  const ok=await initAdsgram(); if(!ok) return;
+
+  state.busy=true;
+  const btn=document.getElementById("watchBtn");
+  btn.classList.add("loading"); btn.textContent="LOADING ADS...";
+  try {
+    await state.adsgram.show();
+    // AdsGram Reward format resolves when the rewarded ad has been viewed to the end.
+    const result=await api("/api/ads/reward",{method:"POST",body:JSON.stringify({reward:REWARD_PER_AD})});
+    state.user=result.user;
+    render();
+    document.getElementById("rewardModal").classList.add("show");
+  } catch(err) {
+    toast(err.message || "Ad was not completed or no ad was available.");
+  } finally {
+    state.busy=false; btn.classList.remove("loading"); render();
+  }
+}
+
+function closeModal(){document.getElementById("rewardModal").classList.remove("show");}
+
+async function copyRef(){
+  const value=state.user?.referralLink;
+  if(!value) return;
+  try{await navigator.clipboard.writeText(value);toast("Referral link copied.");}
+  catch{toast(value);}
+}
+
+async function submitWithdrawal(){
+  const binanceId=document.getElementById("binanceId").value.trim();
+  const amount=Number(document.getElementById("withdrawAmount").value);
+  if(!binanceId) return toast("Enter your Binance ID.");
+  if(!Number.isInteger(amount) || amount<3000) return toast("Minimum withdrawal is 3,000 PEPE.");
+  if(amount>Number(state.user.balance||0)) return toast("Insufficient PEPE balance.");
+  try{
+    const data=await api("/api/withdrawals",{method:"POST",body:JSON.stringify({binanceId,amount})});
+    state.user=data.user; render();
+    document.getElementById("withdrawAmount").value="";
+    toast("Withdrawal request submitted.");
+    loadWithdrawals();
+  }catch(e){toast(e.message);}
+}
+
+async function loadWithdrawals(){
+  try{
+    const data=await api("/api/withdrawals",{method:"GET"});
+    const box=document.getElementById("withdrawals");
+    if(!data.items.length){box.innerHTML='<p class="note">No withdrawal requests yet.</p>';return;}
+    box.innerHTML=data.items.map(x=>`
+      <div class="withdraw-item">
+        <div class="withdraw-top"><span>${Number(x.amount).toLocaleString()} PEPE</span><span class="status ${x.status}">${x.status.toUpperCase()}</span></div>
+        <div class="note">Binance ID: ${escapeHtml(x.binanceId)}<br>${new Date(x.createdAt).toLocaleString()}</div>
+        ${x.adminNote?`<div class="note">Note: ${escapeHtml(x.adminNote)}</div>`:""}
+      </div>`).join("");
+  }catch(e){document.getElementById("withdrawals").innerHTML='<p class="note">Unable to load requests.</p>';}
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+
+(async function boot(){
+  try { await loadMe(); await initAdsgram(); }
+  catch(e) { toast(e.message || "Could not connect to server."); }
+})();
+</script>
+</body>
+</html>
