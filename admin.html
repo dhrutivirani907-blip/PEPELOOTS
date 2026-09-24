@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PEPE LOOTS Admin</title>
+<style>
+body{margin:0;background:#050807;color:#eafff7;font-family:Arial,sans-serif;padding:20px}.wrap{max-width:1100px;margin:auto}
+h1{color:#42f5b2}.card{background:#0d1412;border:1px solid #21443a;border-radius:18px;padding:18px;margin:14px 0}
+input,button,select{padding:11px;border-radius:10px;border:1px solid #31574b;background:#07100d;color:white}button{cursor:pointer;background:#0dbb79;border-color:#0dbb79;color:#00140d;font-weight:700}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #1b2c27;text-align:left;font-size:13px}.pending{color:#ffd65c}.approved{color:#55ffb8}.rejected{color:#ff7187}
+@media(max-width:700px){table{display:block;overflow:auto;white-space:nowrap}}
+</style></head><body><div class="wrap">
+<h1>PEPE LOOTS — Withdrawal Admin</h1>
+<div id="login" class="card"><h3>Admin login</h3><input id="pw" type="password" placeholder="Admin password"><button onclick="login()">LOGIN</button></div>
+<div id="panel" style="display:none"><div class="card"><button onclick="load()">REFRESH</button> <span id="msg"></span></div>
+<div class="card"><table><thead><tr><th>ID</th><th>User</th><th>Binance ID</th><th>Amount</th><th>Status</th><th>Date</th><th>Action</th></tr></thead><tbody id="rows"></tbody></table></div></div>
+</div>
+<script>
+let token=localStorage.getItem("pepe_admin_token")||"";
+async function req(url,opt={}){opt.headers=Object.assign({"Content-Type":"application/json","Authorization":"Bearer "+token},opt.headers||{});let r=await fetch(url,opt);let d=await r.json();if(!r.ok)throw Error(d.error||"Request failed");return d}
+async function login(){try{let d=await fetch("/api/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:document.getElementById("pw").value})}).then(r=>r.json());if(!d.token)throw Error(d.error||"Login failed");token=d.token;localStorage.setItem("pepe_admin_token",token);document.getElementById("login").style.display="none";document.getElementById("panel").style.display="block";load()}catch(e){alert(e.message)}}
+async function load(){try{let d=await req("/api/admin/withdrawals");document.getElementById("rows").innerHTML=d.items.map(x=>`<tr>
+<td>#${x.id}</td><td>${esc(x.firstName||"")} @${esc(x.username||"")}<br><small>${esc(x.telegramId)}</small></td>
+<td>${esc(x.binanceId)}</td><td>${Number(x.amount).toLocaleString()} PEPE</td>
+<td class="${x.status}">${x.status}</td><td>${new Date(x.createdAt).toLocaleString()}</td>
+<td>${x.status==="pending"?`<button onclick="setStatus(${x.id},'approved')">APPROVE</button> <button onclick="setStatus(${x.id},'rejected')">REJECT</button>`:"—"}</td>
+</tr>`).join("")}catch(e){document.getElementById("msg").textContent=e.message;if(e.message.includes("token")){localStorage.removeItem("pepe_admin_token");location.reload()}}}
+async function setStatus(id,status){let note=prompt("Admin note (optional):","");if(note===null)return;try{await req("/api/admin/withdrawals/"+id+"/status",{method:"POST",body:JSON.stringify({status,note})});load()}catch(e){alert(e.message)}}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+if(token){document.getElementById("login").style.display="none";document.getElementById("panel").style.display="block";load()}
+</script></body></html>
